@@ -1,8 +1,8 @@
-import {DTMF, dtmfinit} from "./dtmf_decoder.js";
+import * as wasm from "./pkg/dtmf_decoder.js";
 import * as rec from "./voice.js";
 export {rec};
 
-let decoder= dtmfinit();
+let decoder= new wasm.DTMF();
 
 /*
 DTMF().then(function(decodr){

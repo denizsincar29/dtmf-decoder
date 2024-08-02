@@ -23,7 +23,6 @@ pub struct DTMF {
 impl DTMF {
     #[wasm_bindgen(constructor)]
     pub fn new() -> DTMF {
-        utils::set_panic_hook();
         DTMF {
             detector: Detector::new(44100),  // hope js recordrtc uses 44100
             tone: 'n'
