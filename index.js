@@ -2,14 +2,8 @@ import * as wasm from "./pkg/dtmf_decoder.js";
 import * as rec from "./voice.js";
 export {rec};
 
-let decoder= new wasm.DTMF();
+let decoder=null;
 
-/*
-DTMF().then(function(decodr){
-    decoder = decodr;
-    console.log(decoder);
-});
-*/
 
 let t="n";
 
@@ -40,6 +34,8 @@ rec.initrecord(ondataavailable);
 // record button on click toggle recording.
 // on dom load:
 document.addEventListener("DOMContentLoaded", function(){
+    // create the decoder
+    decoder=new wasm.DTMF();
     // enable the record button
     document.getElementById("record").disabled=false;
     document.getElementById("record").onclick=function(){
