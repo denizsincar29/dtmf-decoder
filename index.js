@@ -33,8 +33,9 @@ function ondataavailable(data){
 rec.initrecord(ondataavailable);
 // record button on click toggle recording.
 // on dom load:
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", async function(){
     // create the decoder
+    await wasm.default();
     decoder=new wasm.DTMF();
     // enable the record button
     document.getElementById("record").disabled=false;
