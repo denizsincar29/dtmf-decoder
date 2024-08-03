@@ -37,6 +37,7 @@ await wasm.default();
 console.log("Wasm module initialized");
 decoder = new wasm.DTMF();
 console.log("Decoder initialized");
+/*
 // Enable the record button
 const recordButton = document.getElementById("record");
 recordButton.disabled = false;
@@ -45,4 +46,5 @@ recordButton.onclick = async function () {
     console.log("Recording: " + recording);
     recordButton.innerHTML = recording ? "Stop" : "Record";
 };
+*/ // Commented out because the record button is not needed but in case it is needed, uncomment this block
 
