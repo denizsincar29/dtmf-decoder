@@ -19,16 +19,16 @@ extern "C" {
 #[wasm_bindgen]
 pub struct DTMF {
     detector: Detector,
-    pub tone: char // want it to be 'n' by default
+    pub tone: char, // want it to be 'n' by default
 }
 
 #[wasm_bindgen]
 impl DTMF {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> DTMF {
+    pub fn new(samplerate: u32) -> DTMF {
         utils::set_panic_hook();
         DTMF {
-            detector: Detector::new(44100),  // hope js recordrtc uses 44100
+            detector: Detector::new(samplerate),  // hope js recordrtc uses 44100
             tone: 'n'
         }
     }
@@ -47,7 +47,7 @@ impl DTMF {
     #[wasm_bindgen]
     pub fn decode(&mut self, samples: Vec<f32>) -> char {
         // print the samples length
-        log(&format!("samples length: {}", samples.len()));
+        // log(&format!("samples length: {}", samples.len()));  // this is too much, spamming the console, but at least it works
         self.detector.decode(samples);
         self.tone = self.detector.last_tone();
         self.tone

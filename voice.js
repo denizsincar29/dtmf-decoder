@@ -1,23 +1,32 @@
-// making the same recorder but without recordrtc
-
-async function initrecord(dataavailable) {
+async function initRecord(dataAvailable) {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const audioContext = new AudioContext();
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        if (audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
+
         const mediaStreamSource = audioContext.createMediaStreamSource(stream);
-        const processor = audioContext.createScriptProcessor(1024, 1, 1);
-        mediaStreamSource.connect(processor);
-        processor.connect(audioContext.destination);
-        processor.onaudioprocess = function (event) {
-            const float32Array = event.inputBuffer.getChannelData(0);
-            dataavailable(float32Array);
+
+        // Adding the AudioWorklet processor
+        await audioContext.audioWorklet.addModule('processor.js');
+        const processorNode = new AudioWorkletNode(audioContext, 'audio-processor');
+
+        processorNode.port.onmessage = (event) => {
+            const float32Array = event.data;
+            dataAvailable(float32Array);
         };
-        console.log("Recorder initialized");
+
+        mediaStreamSource.connect(processorNode);
+        processorNode.connect(audioContext.destination);
+
+        console.log("Recorder initialized with AudioWorklet");
+        // return sampleRate;
+        return audioContext.sampleRate;
     } catch (error) {
         console.error("Error initializing recorder:", error);
     }
 }
 
-// i very very very hope that no button is required to get microphone access. Because some browsers require user gesture for some actions
-// so i will call initrecord right away in index.js
-export { initrecord }; // yep, give it away to index.js
+export { initRecord };

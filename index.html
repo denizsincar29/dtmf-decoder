@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Wasm test</title>
+  <title>Wasm DTMF decoder</title>
   <!-- <script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script> --> <!-- not needed -->
   <style>
     #tone {
@@ -12,7 +12,13 @@
 </head>
 <body>
 <h1>DTMF decoder</h1>
-<!-- <button id="record" disabled>Record</button> --> <!-- not needed -->
+<ol>
+  <li>allow microphone access</li>
+  <li>Press a key on your phone or another device. Make sure the microphone on this device hears the dialing tones</li>
+  <li>See the decoded key below</li>
+</ol>
+<p>When you start shouting out the keys that a person nearby is dialing, he will be shocked. This is a fun way to show how DTMF works.</p>
+<h1>Decoded keys</h1>
 <div id="tone"></div>
 <script async type="module" src="index.js"></script>
 </body>
