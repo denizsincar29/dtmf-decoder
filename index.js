@@ -1,5 +1,6 @@
 import * as wasm from "./pkg/dtmf_decoder.js";
 import * as rec from "./voice.js";
+import { srSpeak } from "./sr.js";
 
 export { rec };
 
@@ -9,6 +10,7 @@ let currentTone = "n";
 // Function to handle the detected tone
 function onToneDetected(tone) {
     document.getElementById("tone").innerHTML += tone;
+    srSpeak(tone); // screen reader
 }
 
 // Function to process the audio data
