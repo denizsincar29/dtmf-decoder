@@ -1,33 +1,35 @@
-async function initRecord(dataAvailable) {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+async function initRecord(ondataavailable) {
+    // Request access to the microphone
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-        if (audioContext.state === 'suspended') {
-            await audioContext.resume();
-        }
+    // Create an AudioContext
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const sampleRate = audioContext.sampleRate;
+    console.log(sampleRate);
 
-        const mediaStreamSource = audioContext.createMediaStreamSource(stream);
+    // Create a MediaStreamSource from the microphone input
+    const source = audioContext.createMediaStreamSource(stream);
 
-        // Adding the AudioWorklet processor
-        await audioContext.audioWorklet.addModule('processor.js');
-        const processorNode = new AudioWorkletNode(audioContext, 'audio-processor');
+    // Create a ScriptProcessorNode with a buffer size of 512
+    const bufferSize = 512;
+    const processor = audioContext.createScriptProcessor(bufferSize, 1, 1);
 
-        processorNode.port.onmessage = (event) => {
-            const float32Array = event.data;
-            console.log(float32Array);
-            dataAvailable(float32Array);
-        };
+    // Connect the source to the processor, and the processor to the destination (to avoid audio feedback)
+    source.connect(processor);
+    processor.connect(audioContext.destination);
 
-        mediaStreamSource.connect(processorNode);
-        processorNode.connect(audioContext.destination);
+    // Handle audio processing
+    processor.onaudioprocess = (event) => {
+        const inputBuffer = event.inputBuffer;
+        const inputData = inputBuffer.getChannelData(0); // Get the data for the first channel
+        const float32Array = new Float32Array(bufferSize);
+        float32Array.set(inputData);
+        // console.log(float32Array);
+        // Call the callback with the audio data
+        ondataavailable(float32Array);
+    };
 
-        console.log("Recorder initialized with AudioWorklet");
-        // return sampleRate;
-        return audioContext.sampleRate;
-    } catch (error) {
-        console.error("Error initializing recorder:", error);
-    }
+    return sampleRate;
 }
 
 export { initRecord };

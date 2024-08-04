@@ -27,6 +27,8 @@ impl DTMF {
     #[wasm_bindgen(constructor)]
     pub fn new(samplerate: u32) -> DTMF {
         utils::set_panic_hook();
+        log("DTMF decoder initialized");
+        log(&format!("samplerate: {}", samplerate));
         DTMF {
             detector: Detector::new(samplerate),  // hope js recordrtc uses 44100
             tone: 'n'
