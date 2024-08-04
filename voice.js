@@ -15,6 +15,7 @@ async function initRecord(dataAvailable) {
 
         processorNode.port.onmessage = (event) => {
             const float32Array = event.data;
+            console.log(float32Array);
             dataAvailable(float32Array);
         };
 
