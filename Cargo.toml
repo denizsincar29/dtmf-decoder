@@ -1,8 +1,11 @@
 [package]
 name = "dtmf-decoder"
+description = "A realtime DTMF decoder written in Rust, compiled to WebAssembly."
+repository = "https://github.com/denizsincar29/dtmf-decoder"
+license = "MIT"
 version = "0.1.0"
 authors = ["denizsincar29"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
